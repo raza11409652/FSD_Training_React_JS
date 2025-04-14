@@ -8,3 +8,16 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.header-action-container {
+  display: flex;
+  flex-direction: row-reverse;
+  height: inherit;
+  align-items: center;
+  padding: 0 12px;
+}

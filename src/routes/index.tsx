@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useAppDispatch } from "../slice";
 import { getProjectsAction } from "../slice/reducer/project";
+import HomeContainer from "../container/homeContainer";
 
 export const AppRoutes = () => {
   // Authentication will be implemented later on
@@ -17,8 +18,9 @@ export const AppRoutes = () => {
       <Suspense fallback={<>Loading....</>}>
         <BrowserRouter>
           <Routes>
-            <Route path="/">
-              <Route index element={<>Home page</>} />
+            <Route path="/" element={<HomeContainer />}>
+              <Route index element={<>Dashboard</>} />
+              <Route path="/register" element={<>Register signup</>} />
             </Route>
             <Route path="*" element={<Navigate to={"/"} />} />
           </Routes>
