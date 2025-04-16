@@ -1,9 +1,12 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import projectReducer from "./reducer/project";
+import authReducer from "./reducer/auth";
+
 export const store = configureStore({
   reducer: {
     project: projectReducer,
+    auth: authReducer,
   },
 });
 
