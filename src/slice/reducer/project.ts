@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getListOfProjectsApi } from "../../api/project";
+import { createProjectApi, getListOfProjectsApi } from "../../api/project";
 interface Props {
   project?: GetProjectResponse;
   loading: boolean;
+  loadingSubmit?: boolean;
 }
 
 export const getProjectsAction = createAsyncThunk<GetProjectResponse, void>(
@@ -14,6 +15,17 @@ export const getProjectsAction = createAsyncThunk<GetProjectResponse, void>(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       return rejectWithValue("ERROR");
+    }
+  }
+);
+export const createProjectAction = createAsyncThunk<void, ProjectBody>(
+  "createProjectAction",
+  async (body, { rejectWithValue }) => {
+    try {
+      const response = createProjectApi(body);
+      return response;
+    } catch (er) {
+      return rejectWithValue(er);
     }
   }
 );
@@ -34,6 +46,15 @@ const projectSlice = createSlice({
     b.addCase(getProjectsAction.fulfilled, (s, { payload }) => {
       s.loading = false;
       s.project = payload;
+    });
+    b.addCase(createProjectAction.pending, (s) => {
+      s.loadingSubmit = true;
+    });
+    b.addCase(createProjectAction.rejected, (s) => {
+      s.loadingSubmit = false;
+    });
+    b.addCase(createProjectAction.fulfilled, (s) => {
+      s.loadingSubmit = false;
     });
   },
 });

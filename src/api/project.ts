@@ -8,4 +8,9 @@ const getListOfProjectsApi = async () => {
   );
   return data;
 };
-export { getListOfProjectsApi };
+
+const createProjectApi = async (body: ProjectBody) => {
+  const { data } = await axiosI.post("projects", body);
+  return data;
+};
+export { getListOfProjectsApi, createProjectApi };

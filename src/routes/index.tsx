@@ -27,6 +27,9 @@ export const AppRoutes = () => {
               <Route path="/" element={<HomeContainer />}>
                 <Route index element={<>Dashboard</>} />
                 <Route path="/projects" element={<ProjectContainer />} />
+                <Route path="/tasks" element={<>Task container</>} />
+                <Route path="/users" element={<>Task container</>} />
+
               </Route>
             ) : (
               <Route path="/">
