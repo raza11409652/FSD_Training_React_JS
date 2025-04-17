@@ -2,12 +2,16 @@ import React from "react";
 import { Button, Layout, theme } from "antd";
 import { Outlet } from "react-router-dom";
 import { LogoutOutlined } from "@ant-design/icons";
+import { useAppDispatch } from "../slice";
+import { logoutAction } from "../slice/reducer/auth";
 const { Header, Content, Sider } = Layout;
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  const logoutClickHandler = () => dispatch(logoutAction());
   return (
     <Layout style={{ height: "100vh" }}>
       <Sider collapsedWidth="0">{/* Logo   & Menu */}</Sider>
@@ -16,7 +20,12 @@ const App: React.FC = () => {
           style={{ padding: 0, background: colorBgContainer }}
           children={
             <div className="header-action-container ">
-              <Button color="danger" variant="solid" icon={<LogoutOutlined />}>
+              <Button
+                color="danger"
+                variant="solid"
+                icon={<LogoutOutlined />}
+                onClick={logoutClickHandler}
+              >
                 Logout
               </Button>
             </div>

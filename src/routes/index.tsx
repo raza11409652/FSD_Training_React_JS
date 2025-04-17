@@ -1,28 +1,38 @@
 import React from "react";
 import { Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { useAppDispatch } from "../slice";
+import { useAppDispatch, useAppSelector } from "../slice";
 import { getProjectsAction } from "../slice/reducer/project";
 import HomeContainer from "../container/homeContainer";
 import AuthInitContainer from "../container/authInitContainer";
+import LoginContainer from "../container/loginContainer";
+import ProjectContainer from "../container/projectContainer";
 
 export const AppRoutes = () => {
   // Authentication will be implemented later on
   // On application load get List of projects
 
+  const { isAuthenticated } = useAppSelector((a) => a.auth);
+
   const dispatch = useAppDispatch();
   React.useEffect(() => {
-    dispatch(getProjectsAction());
-  }, [dispatch]);
+    if (isAuthenticated) dispatch(getProjectsAction());
+  }, [dispatch, isAuthenticated]);
   return (
     <>
       <Suspense fallback={<>Loading....</>}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<HomeContainer />}>
-              <Route index element={<>Dashboard</>} />
-              <Route path="/register" element={<>Register signup</>} />
-            </Route>
+            {isAuthenticated ? (
+              <Route path="/" element={<HomeContainer />}>
+                <Route index element={<>Dashboard</>} />
+                <Route path="/projects" element={<ProjectContainer />} />
+              </Route>
+            ) : (
+              <Route path="/">
+                <Route index element={<LoginContainer />} />
+              </Route>
+            )}
             <Route path="/auth/init" element={<AuthInitContainer />} />
             <Route path="*" element={<Navigate to={"/"} />} />
           </Routes>

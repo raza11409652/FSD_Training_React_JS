@@ -10,3 +10,12 @@ interface Project {
   createdAt: string;
   updatedAt: string;
 }
+ interface UserProfile {
+  id: number
+  name: string
+  profileImage: string
+  role: string
+  email: string
+  createdAt: string
+  updatedAt: string
+}
