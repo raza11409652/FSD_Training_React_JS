@@ -7,6 +7,7 @@ import HomeContainer from "../container/homeContainer";
 import AuthInitContainer from "../container/authInitContainer";
 import LoginContainer from "../container/loginContainer";
 import ProjectContainer from "../container/projectContainer";
+import TaskContainer from "../container/taskContainer";
 
 export const AppRoutes = () => {
   // Authentication will be implemented later on
@@ -27,9 +28,8 @@ export const AppRoutes = () => {
               <Route path="/" element={<HomeContainer />}>
                 <Route index element={<>Dashboard</>} />
                 <Route path="/projects" element={<ProjectContainer />} />
-                <Route path="/tasks" element={<>Task container</>} />
+                <Route path="/tasks" element={<TaskContainer />} />
                 <Route path="/users" element={<>Task container</>} />
-
               </Route>
             ) : (
               <Route path="/">

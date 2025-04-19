@@ -20,8 +20,8 @@ const ProjectContainer = () => {
             {projects?.create === true ? (
               <Button
                 icon={<PlusOutlined />}
-                variant="solid"
-                color="primary"
+                variant="filled"
+                color="volcano"
                 onClick={() => setOpenProjForm(true)}
               >
                 Create New Projects
