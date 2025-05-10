@@ -60,6 +60,7 @@ const ProjectContainer = () => {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      width: 50,
       render: (text: any, _record: any) => {
         return <div style={{ display: "flex" }}>{text}</div>;
       },
@@ -68,6 +69,7 @@ const ProjectContainer = () => {
       title: "Name",
       dataIndex: "name",
       key: "project_name",
+      width: 200,
       render: (text: any, _record: any) => {
         return <div style={{ display: "flex" }}>{text}</div>;
       },
@@ -76,6 +78,7 @@ const ProjectContainer = () => {
       title: "Description",
       dataIndex: "description",
       key: "description",
+      width: 200,
       render: (text: any, _record: any) => {
         return (
           <div style={{ display: "flex" }}>
@@ -88,6 +91,7 @@ const ProjectContainer = () => {
       title: "Created At",
       dataIndex: "createdAt",
       key: "createdAt",
+      width: 200,
       render: (text: any, _record: any) => {
         return (
           <div style={{ display: "flex" }}>{new Date(text).toString()}</div>
@@ -98,6 +102,7 @@ const ProjectContainer = () => {
       title: "Updated At",
       dataIndex: "updatedAt",
       key: "updatedAt",
+      width: 200,
       render: (text: any, _record: any) => {
         return <div style={{ display: "flex" }}>{text}</div>;
       },
@@ -132,6 +137,7 @@ const ProjectContainer = () => {
       title: "Update",
       dataIndex: "update",
       key: "updateData",
+      width: 150,
       render: (_text: any, record: any) => {
         return (
           <div style={{ display: "flex" }}>
@@ -151,6 +157,7 @@ const ProjectContainer = () => {
       title: "Delete",
       dataIndex: "delete",
       key: "deleteData",
+      width: 150,
       render: (_text: any, record: any) => {
         return (
           <div style={{ display: "flex" }}>
@@ -197,6 +204,10 @@ const ProjectContainer = () => {
         columns={projectState.projectColumns}
         dataSource={projectState.rowsData}
         loading={loading}
+        scroll={{
+          x: 300,
+          y: 400,
+        }}
         pagination={{
           pageSize: 10,
           /* Commenting for now */
