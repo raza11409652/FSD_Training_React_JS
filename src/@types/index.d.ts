@@ -21,6 +21,11 @@ interface UserProfile {
 }
 
 interface ProjectBody {
-  title: string;
+  name: string;
   description: string;
+}
+
+interface UpdatePayload {
+  id: number | string;
+  body: ProjectBody;
 }
