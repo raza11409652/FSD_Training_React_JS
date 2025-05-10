@@ -8,8 +8,7 @@ interface Props {
 }
 const CreateNewProject: React.FC<Props> = ({ ...props }) => {
   const dispatch = useAppDispatch();
-  const { loadingSubmit, project } = useAppSelector((a) => a.project);
-  console.log("project", project)
+  const { loadingSubmit } = useAppSelector((a) => a.project);
   const obj: ProjectBody = { name: "", description: "" };
   const [form] = Form.useForm();
   const handleFormSubmit = (p: ProjectBody) => {
@@ -47,17 +46,6 @@ const CreateNewProject: React.FC<Props> = ({ ...props }) => {
               label="Project description"
               rules={[
                 { type: "string", message: "Description Should be string" },
-                {
-                  validator: (_, value) => {
-                    if (!value) return Promise.resolve();
-                    const exists = project?.records.some(
-                      (p: any) => p.name.trim().toLowerCase() === value.trim().toLowerCase()
-                    );
-                    return exists
-                      ? Promise.reject("Project name already exists")
-                      : Promise.resolve();
-                  },
-                }
               ]}
             >
               <Input.TextArea name="description" />
