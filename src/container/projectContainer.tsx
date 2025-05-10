@@ -6,11 +6,7 @@ import CreateNewProject from "../components/projects/createForm";
 import { useEffect, useReducer } from "react";
 import { ProjectState } from "../models/ProjectState";
 import { ProjectAction } from "../models/ProjectAction";
-import {
-  getProjectsAction,
-  updateProjectAction,
-} from "../slice/reducer/project";
-import { useAppDispatch, useAppSelector } from "../slice";
+import { useAppSelector } from "../slice";
 import UpdateNewProject from "../components/projects/updateForm";
 import DeleteProject from "../components/projects/deleteForm";
 
