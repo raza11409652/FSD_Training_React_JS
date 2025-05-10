@@ -9,7 +9,7 @@ import {
 const DeleteProject = (props: any) => {
   const dispatch = useAppDispatch();
   const { open, onClose, deleteID } = props;
-  const { loadingUpdate } = useAppSelector((a) => a.project);
+  const { loadingDelete } = useAppSelector((a) => a.project);
   const [form] = Form.useForm();
   const handleFormSubmit = () => {
     dispatch(deleteProjectAction(deleteID.id)).then((a) => {
@@ -32,7 +32,7 @@ const DeleteProject = (props: any) => {
               Are you sure, you want to delete project {deleteID.name}
             </span>
             <Form.Item>
-              <Button htmlType="submit" loading={loadingUpdate}>
+              <Button htmlType="submit" loading={loadingDelete}>
                 Save
               </Button>
             </Form.Item>
