@@ -15,7 +15,6 @@ const UpdateNewProject = (props: any) => {
     name: projectData.name,
     description: projectData.description,
   };
-  console.log(projectData);
   const [form] = Form.useForm();
 
   useEffect(() => {
