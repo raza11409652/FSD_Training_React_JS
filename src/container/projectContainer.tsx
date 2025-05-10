@@ -10,6 +10,7 @@ import { useAppSelector } from "../slice";
 import UpdateNewProject from "../components/projects/updateForm";
 import DeleteProject from "../components/projects/deleteForm";
 
+// Reducer Initial State
 const initialState: ProjectState = {
   rowsData: [],
   projForm: false,
@@ -20,6 +21,7 @@ const initialState: ProjectState = {
   projectColumns: [],
 };
 
+// Reducer Function
 function projectReducer(
   state: ProjectState,
   action: ProjectAction
@@ -52,26 +54,7 @@ const ProjectContainer = () => {
     initialState
   );
 
-  const handleUpdate: any = (record: any) => {
-    dispatchProjectState({ type: "UPDATE_FORM", payload: true });
-    const projectData: any = {
-      id: record?.id,
-      name: record?.name,
-      description: record?.description,
-    };
-    dispatchProjectState({ type: "PROJECT_DATA", payload: projectData });
-  };
-
-  const handleDelete: any = (record: any) => {
-    const projectData: any = {
-      id: record?.id,
-      name: record?.name,
-      description: record?.description,
-    };
-    dispatchProjectState({ type: "DELETE_FORM", payload: true });
-    dispatchProjectState({ type: "DELETE_ID", payload: projectData });
-  };
-
+  // Column Definitions
   const columns = [
     {
       title: "ID",
@@ -119,47 +102,32 @@ const ProjectContainer = () => {
         return <div style={{ display: "flex" }}>{text}</div>;
       },
     },
-    // {
-    //   title: "Update",
-    //   dataIndex: "update",
-    //   key: "updateData",
-    //   render: (_text: any, record: any) => {
-    //     return (
-    //       <div style={{ display: "flex" }}>
-    //         <Button
-    //           icon={<EditOutlined />}
-    //           variant="filled"
-    //           color="volcano"
-    //           onClick={() => handleUpdate(record)}
-    //         >
-    //           Update
-    //         </Button>
-    //       </div>
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Delete",
-    //   dataIndex: "delete",
-    //   key: "deleteData",
-    //   render: (_text: any, record: any) => {
-    //     return (
-    //       <div style={{ display: "flex" }}>
-    //         <Button
-    //           icon={<DeleteOutlined />}
-    //           variant="filled"
-    //           color="volcano"
-    //           onClick={() => handleDelete(record)}
-    //         >
-    //           Delete
-    //         </Button>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
 
+  // Update Project Functionality
+  const handleUpdate: any = (record: any) => {
+    dispatchProjectState({ type: "UPDATE_FORM", payload: true });
+    const projectData: any = {
+      id: record?.id,
+      name: record?.name,
+      description: record?.description,
+    };
+    dispatchProjectState({ type: "PROJECT_DATA", payload: projectData });
+  };
+
+  // Delete Project Functionality
+  const handleDelete: any = (record: any) => {
+    const projectData: any = {
+      id: record?.id,
+      name: record?.name,
+      description: record?.description,
+    };
+    dispatchProjectState({ type: "DELETE_FORM", payload: true });
+    dispatchProjectState({ type: "DELETE_ID", payload: projectData });
+  };
+
   useEffect(() => {
+    // Admin Role Views
     const updateColumn = {
       title: "Update",
       dataIndex: "update",
@@ -179,7 +147,6 @@ const ProjectContainer = () => {
         );
       },
     };
-
     const deleteColumn = {
       title: "Delete",
       dataIndex: "delete",
@@ -201,6 +168,7 @@ const ProjectContainer = () => {
     };
     if (projects.update) columns.push(updateColumn);
     if (projects.delete) columns.push(deleteColumn);
+
     dispatchProjectState({ type: "PROJECT_COLUMNS", payload: columns });
     dispatchProjectState({ type: "ROWS_DATA", payload: project?.records });
   }, [project]);
@@ -227,9 +195,16 @@ const ProjectContainer = () => {
       <Table
         rowKey={"id"}
         columns={projectState.projectColumns}
-        pagination={false}
         dataSource={projectState.rowsData}
         loading={loading}
+        pagination={{
+          pageSize: 10,
+          /* Commenting for now */
+          // onChange: (page, pageSize) => {
+          //   console.log("Page:", page, "PageSize:", pageSize);
+          //   // Optionally fetch data for the selected page from server
+          // },
+        }}
       />
       <CreateNewProject
         open={projectState.projForm}
@@ -237,6 +212,7 @@ const ProjectContainer = () => {
           dispatchProjectState({ type: "PROJ_FORM", payload: false })
         }
       />
+      {/* Update Project Component */}
       <UpdateNewProject
         open={projectState.updateForm}
         onClose={() =>
@@ -244,6 +220,8 @@ const ProjectContainer = () => {
         }
         projectData={projectState.projectData}
       />
+
+      {/* Delete Project Component */}
       <DeleteProject
         open={projectState.deleteForm}
         onClose={() =>

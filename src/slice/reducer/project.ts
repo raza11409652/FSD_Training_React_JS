@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createProjectApi, deleteProjectApi, getListOfProjectsApi, updateProjectApi } from "../../api/project";
+import {
+  createProjectApi,
+  deleteProjectApi,
+  getListOfProjectsApi,
+  updateProjectApi,
+} from "../../api/project";
 interface Props {
   project?: GetProjectResponse;
   loading: boolean;
   loadingSubmit?: boolean;
-  loadingUpdate?: boolean,
-  loadingDelete?: boolean
+  loadingUpdate?: boolean;
+  loadingDelete?: boolean;
 }
 
 export const getProjectsAction = createAsyncThunk<GetProjectResponse, void>(

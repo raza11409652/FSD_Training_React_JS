@@ -5,6 +5,7 @@ import {
   getProjectsAction,
   updateProjectAction,
 } from "../../slice/reducer/project";
+import { useEffect } from "react";
 
 const UpdateNewProject = (props: any) => {
   const dispatch = useAppDispatch();
@@ -14,7 +15,19 @@ const UpdateNewProject = (props: any) => {
     name: projectData.name,
     description: projectData.description,
   };
+  console.log(projectData);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (projectData && open) {
+      form.setFieldsValue({
+        name: projectData.name,
+        description: projectData.description,
+      });
+    }
+  }, [projectData, open]);
+
+  // Update Project Submit Functionality
   const handleFormSubmit = (p: ProjectBody) => {
     const updateBody: UpdatePayload = {
       id: projectData.id,
@@ -58,14 +71,18 @@ const UpdateNewProject = (props: any) => {
               <Input.TextArea name="description" />
             </Form.Item>
             <Form.Item>
-              <Button htmlType="submit" loading={loadingUpdate}>
+              <Button
+                htmlType="submit"
+                loading={loadingUpdate}
+                color="volcano"
+                variant="filled"
+              >
                 Save
               </Button>
             </Form.Item>
           </Form>
         </>
       }
-      //   onClose={props.onClose}
       onCancel={() => onClose()}
     />
   );

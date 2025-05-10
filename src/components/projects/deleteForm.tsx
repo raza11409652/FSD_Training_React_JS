@@ -1,5 +1,6 @@
 import { Button, Form, Modal } from "antd";
 import { useAppDispatch, useAppSelector } from "../../slice";
+import { QuestionCircleTwoTone, WarningTwoTone } from "@ant-design/icons";
 
 import {
   deleteProjectAction,
@@ -11,6 +12,8 @@ const DeleteProject = (props: any) => {
   const { open, onClose, deleteID } = props;
   const { loadingDelete } = useAppSelector((a) => a.project);
   const [form] = Form.useForm();
+
+  // Delete Project Submit Functionality
   const handleFormSubmit = () => {
     dispatch(deleteProjectAction(deleteID.id)).then((a) => {
       if (a.meta.requestStatus === "fulfilled") {
@@ -24,22 +27,34 @@ const DeleteProject = (props: any) => {
     <Modal
       footer={null}
       open={open}
-      title="Delete project"
+      title={
+        <div>
+          Delete project <WarningTwoTone />
+        </div>
+      }
       children={
         <>
           <Form onFinish={handleFormSubmit} layout="vertical" form={form}>
-            <span>
-              Are you sure, you want to delete project {deleteID.name}
-            </span>
+            <div style={{ marginBottom: "1rem" }}>
+              <span>Are you sure, you want to delete </span>{" "}
+              <span style={{ fontWeight: 600, color: "#FF0000" }}>
+                {deleteID.name}
+              </span>{" "}
+              <QuestionCircleTwoTone />
+            </div>
             <Form.Item>
-              <Button htmlType="submit" loading={loadingDelete}>
-                Save
+              <Button
+                htmlType="submit"
+                loading={loadingDelete}
+                color="volcano"
+                variant="filled"
+              >
+                Delete
               </Button>
             </Form.Item>
           </Form>
         </>
       }
-      //   onClose={props.onClose}
       onCancel={() => onClose()}
     />
   );
