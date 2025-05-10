@@ -1,32 +1,38 @@
 import { Button, Form, Input, Modal } from "antd";
-import React from "react";
 import { useAppDispatch, useAppSelector } from "../../slice";
-import { createProjectAction, getProjectsAction } from "../../slice/reducer/project";
-interface Props {
-  open: true | false;
-  onClose: (refresh?: true | false) => void;
-}
-const CreateNewProject: React.FC<Props> = ({ ...props }) => {
+
+import {
+  getProjectsAction,
+  updateProjectAction,
+} from "../../slice/reducer/project";
+
+const UpdateNewProject = (props: any) => {
   const dispatch = useAppDispatch();
-  const { loadingSubmit, project } = useAppSelector((a) => a.project);
-  console.log("project", project)
-  const obj: ProjectBody = { name: "", description: "" };
+  const { open, onClose, projectData } = props;
+  const { loadingUpdate } = useAppSelector((a) => a.project);
+  const obj: ProjectBody = {
+    name: projectData.name,
+    description: projectData.description,
+  };
   const [form] = Form.useForm();
   const handleFormSubmit = (p: ProjectBody) => {
-
-    dispatch(createProjectAction(p)).then((a) => {
+    const updateBody: UpdatePayload = {
+      id: projectData.id,
+      body: p,
+    };
+    dispatch(updateProjectAction(updateBody)).then((a) => {
       if (a.meta.requestStatus === "fulfilled") {
         form.resetFields();
         props.onClose(true);
-        dispatch(getProjectsAction())
+        dispatch(getProjectsAction());
       }
     });
   };
   return (
     <Modal
       footer={null}
-      open={props.open}
-      title="Create new project"
+      open={open}
+      title="Update project"
       children={
         <>
           <Form
@@ -47,23 +53,12 @@ const CreateNewProject: React.FC<Props> = ({ ...props }) => {
               label="Project description"
               rules={[
                 { type: "string", message: "Description Should be string" },
-                {
-                  validator: (_, value) => {
-                    if (!value) return Promise.resolve();
-                    const exists = project?.records.some(
-                      (p: any) => p.name.trim().toLowerCase() === value.trim().toLowerCase()
-                    );
-                    return exists
-                      ? Promise.reject("Project name already exists")
-                      : Promise.resolve();
-                  },
-                }
               ]}
             >
               <Input.TextArea name="description" />
             </Form.Item>
             <Form.Item>
-              <Button htmlType="submit" loading={loadingSubmit}>
+              <Button htmlType="submit" loading={loadingUpdate}>
                 Save
               </Button>
             </Form.Item>
@@ -71,8 +66,8 @@ const CreateNewProject: React.FC<Props> = ({ ...props }) => {
         </>
       }
       //   onClose={props.onClose}
-      onCancel={() => props.onClose()}
+      onCancel={() => onClose()}
     />
   );
 };
-export default CreateNewProject;
+export default UpdateNewProject;
