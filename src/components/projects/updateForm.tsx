@@ -1,23 +1,38 @@
 import { Button, Form, Input, Modal } from "antd";
-import React from "react";
 import { useAppDispatch, useAppSelector } from "../../slice";
+
 import {
-  createProjectAction,
   getProjectsAction,
+  updateProjectAction,
 } from "../../slice/reducer/project";
-interface Props {
-  open: true | false;
-  onClose: (refresh?: true | false) => void;
-}
-const CreateNewProject: React.FC<Props> = ({ ...props }) => {
+import { useEffect } from "react";
+
+const UpdateNewProject = (props: any) => {
   const dispatch = useAppDispatch();
-  const { loadingSubmit } = useAppSelector((a) => a.project);
-  const obj: ProjectBody = { name: "", description: "" };
+  const { open, onClose, projectData } = props;
+  const { loadingUpdate } = useAppSelector((a) => a.project);
+  const obj: ProjectBody = {
+    name: projectData.name,
+    description: projectData.description,
+  };
   const [form] = Form.useForm();
 
-  // Create Project Submit Functionality
+  useEffect(() => {
+    if (projectData && open) {
+      form.setFieldsValue({
+        name: projectData.name,
+        description: projectData.description,
+      });
+    }
+  }, [projectData, open]);
+
+  // Update Project Submit Functionality
   const handleFormSubmit = (p: ProjectBody) => {
-    dispatch(createProjectAction(p)).then((a) => {
+    const updateBody: UpdatePayload = {
+      id: projectData.id,
+      body: p,
+    };
+    dispatch(updateProjectAction(updateBody)).then((a) => {
       if (a.meta.requestStatus === "fulfilled") {
         form.resetFields();
         props.onClose(true);
@@ -28,8 +43,8 @@ const CreateNewProject: React.FC<Props> = ({ ...props }) => {
   return (
     <Modal
       footer={null}
-      open={props.open}
-      title="Create new project"
+      open={open}
+      title="Update project"
       children={
         <>
           <Form
@@ -57,7 +72,7 @@ const CreateNewProject: React.FC<Props> = ({ ...props }) => {
             <Form.Item>
               <Button
                 htmlType="submit"
-                loading={loadingSubmit}
+                loading={loadingUpdate}
                 color="volcano"
                 variant="filled"
               >
@@ -67,8 +82,8 @@ const CreateNewProject: React.FC<Props> = ({ ...props }) => {
           </Form>
         </>
       }
-      onCancel={() => props.onClose()}
+      onCancel={() => onClose()}
     />
   );
 };
-export default CreateNewProject;
+export default UpdateNewProject;
