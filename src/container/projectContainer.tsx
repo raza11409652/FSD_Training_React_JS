@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Table, Tooltip } from "antd";
 import ActionHeader from "../components/actionHeader";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import usePermission from "../hooks/usePermission";
@@ -9,6 +9,7 @@ import { ProjectAction } from "../models/ProjectAction";
 import { useAppSelector } from "../slice";
 import UpdateNewProject from "../components/projects/updateForm";
 import DeleteProject from "../components/projects/deleteForm";
+// import { ColumnsType } from "antd/es/table";
 
 // Reducer Initial State
 const initialState: ProjectState = {
@@ -47,7 +48,7 @@ function projectReducer(
 }
 
 const ProjectContainer = () => {
-  const { loading, project }: any = useAppSelector((a) => a.project);
+  const { loading, project } = useAppSelector((a) => a.project);
   const { projects } = usePermission();
   const [projectState, dispatchProjectState] = useReducer(
     projectReducer,
@@ -55,64 +56,65 @@ const ProjectContainer = () => {
   );
 
   // Column Definitions
-  const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      width: 50,
-      render: (text: any, _record: any) => {
-        return <div style={{ display: "flex" }}>{text}</div>;
-      },
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "project_name",
-      width: 200,
-      render: (text: any, _record: any) => {
-        return <div style={{ display: "flex" }}>{text}</div>;
-      },
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-      width: 200,
-      render: (text: any, _record: any) => {
-        return (
-          <div style={{ display: "flex" }}>
-            {text === "" || text === undefined || text === null ? "-" : text}
-          </div>
-        );
-      },
-    },
-    {
-      title: "Created At",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      width: 200,
-      render: (text: any, _record: any) => {
-        return (
-          <div style={{ display: "flex" }}>{new Date(text).toString()}</div>
-        );
-      },
-    },
-    {
-      title: "Updated At",
-      dataIndex: "updatedAt",
-      key: "updatedAt",
-      width: 200,
-      render: (text: any, _record: any) => {
-        return <div style={{ display: "flex" }}>{text}</div>;
-      },
-    },
-  ];
+  // const columns = [
+  //   {
+  //     title: "ID",
+  //     dataIndex: "id",
+  //     key: "id",
+  //     width: 50,
+  //     render: (text: any, _record: Project) => {
+  //       return <div style={{ display: "flex" }}>{text}</div>;
+  //     },
+  //   },
+  //   {
+  //     title: "Name",
+  //     dataIndex: "name",
+  //     key: "project_name",
+  //     width: 200,
+  //     render: (text: any, _record: any) => {
+  //       return <div style={{ display: "flex" }}>{text}</div>;
+  //     },
+  //   },
+  //   {
+  //     title: "Description",
+  //     dataIndex: "description",
+  //     key: "description",
+  //     width: 200,
+  //     render: (text: any, _record: any) => {
+  //       return (
+  //         <div style={{ display: "flex" }}>
+  //           {text === "" || text === undefined || text === null ? "-" : text}
+  //         </div>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     title: "Created At",
+  //     dataIndex: "createdAt",
+  //     key: "createdAt",
+  //     width: 200,
+  //     render: (text: any, _record: any) => {
+  //       return (
+  //         <div style={{ display: "flex" }}>{new Date(text).toString()}</div>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     title: "Updated At",
+  //     dataIndex: "updatedAt",
+  //     key: "updatedAt",
+  //     width: 200,
+  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //     render: (text: any, _record: any) => {
+  //       return <div style={{ display: "flex" }}>{text}</div>;
+  //     },
+  //   },
+  // ];
 
   // Update Project Functionality
-  const handleUpdate: any = (record: any) => {
+  const handleUpdate = (record: Project) => {
     dispatchProjectState({ type: "UPDATE_FORM", payload: true });
-    const projectData: any = {
+    const projectData = {
       id: record?.id,
       name: record?.name,
       description: record?.description,
@@ -121,8 +123,8 @@ const ProjectContainer = () => {
   };
 
   // Delete Project Functionality
-  const handleDelete: any = (record: any) => {
-    const projectData: any = {
+  const handleDelete = (record: Project) => {
+    const projectData = {
       id: record?.id,
       name: record?.name,
       description: record?.description,
@@ -131,14 +133,13 @@ const ProjectContainer = () => {
     dispatchProjectState({ type: "DELETE_ID", payload: projectData });
   };
 
-  useEffect(() => {
-    // Admin Role Views
-    const updateColumn = {
+  /**
+   * const updateColumn = {
       title: "Update",
       dataIndex: "update",
       key: "updateData",
       width: 150,
-      render: (_text: any, record: any) => {
+      render: (_text: string, record: Project) => {
         return (
           <div style={{ display: "flex" }}>
             <Button
@@ -158,13 +159,13 @@ const ProjectContainer = () => {
       dataIndex: "delete",
       key: "deleteData",
       width: 150,
-      render: (_text: any, record: any) => {
+      render: (_: string, record: Project) => {
         return (
           <div style={{ display: "flex" }}>
             <Button
               icon={<DeleteOutlined />}
-              variant="filled"
-              color="volcano"
+              variant="solid"
+              color="red"
               onClick={() => handleDelete(record)}
             >
               Delete
@@ -173,35 +174,130 @@ const ProjectContainer = () => {
         );
       },
     };
-    if (projects.update) columns.push(updateColumn);
-    if (projects.delete) columns.push(deleteColumn);
+   */
 
-    dispatchProjectState({ type: "PROJECT_COLUMNS", payload: columns });
+  useEffect(() => {
+    // Admin Role Views
+
+    // if (projects.update) columns.push(updateColumn);
+    // if (projects.delete) columns.push(deleteColumn);
+
+    // dispatchProjectState({ type: "PROJECT_COLUMNS", payload: columns });
     dispatchProjectState({ type: "ROWS_DATA", payload: project?.records });
-  }, [project]);
+  }, [project, projects.delete, projects.update]);
 
   return (
     <>
-      {projects.create && (
-        <ActionHeader
-          title="Projects"
-          children={
-            <Button
-              icon={<PlusOutlined />}
-              variant="filled"
-              color="volcano"
-              onClick={() =>
-                dispatchProjectState({ type: "PROJ_FORM", payload: true })
-              }
-            >
-              Create New Projects
-            </Button>
-          }
-        />
-      )}
+      <ActionHeader
+        title="Projects"
+        children={
+          <Button
+            hidden={!projects.create}
+            icon={<PlusOutlined />}
+            variant="filled"
+            color="volcano"
+            onClick={() =>
+              dispatchProjectState({ type: "PROJ_FORM", payload: true })
+            }
+          >
+            Create New Projects
+          </Button>
+        }
+      />
+
       <Table
         rowKey={"id"}
-        columns={projectState.projectColumns}
+        columns={[
+          {
+            title: "ID",
+            dataIndex: "id",
+            key: "id",
+            width: 50,
+            render: (text: string) => {
+              return <div style={{ display: "flex" }}>{text}</div>;
+            },
+          },
+          {
+            title: "Name",
+            dataIndex: "name",
+            key: "project_name",
+            width: 200,
+            render: (text: string) => {
+              return <div style={{ display: "flex" }}>{text}</div>;
+            },
+          },
+          {
+            title: "Description",
+            dataIndex: "description",
+            key: "description",
+            width: 200,
+            render: (text?: string) => {
+              return (
+                <div style={{ display: "flex" }}>
+                  {text === "" || text === undefined || text === null
+                    ? "-"
+                    : text}
+                </div>
+              );
+            },
+          },
+          {
+            title: "Created At",
+            dataIndex: "createdAt",
+            key: "createdAt",
+            width: 200,
+            render: (text: string) => {
+              return (
+                <div style={{ display: "flex" }}>
+                  {new Date(text).toString()}
+                </div>
+              );
+            },
+          },
+          {
+            title: "Updated At",
+            dataIndex: "updatedAt",
+            key: "updatedAt",
+            width: 200,
+            render: (text: string) => {
+              return <div style={{ display: "flex" }}>{text}</div>;
+            },
+          },
+          {
+            title: "Action",
+            dataIndex: "id",
+            key: "id",
+            render: (_, record: Project) => {
+              return (
+                <>
+                  {projects.update ? (
+                    <Tooltip title="Edit Project">
+                      <Button
+                        onClick={() => handleUpdate(record)}
+                        title="Edit Project"
+                        variant="text"
+                        icon={<EditOutlined />}
+                      ></Button>
+                    </Tooltip>
+                  ) : null}
+                  {projects.delete ? (
+                    <Tooltip title="Edit Project">
+                      <Button
+                        onClick={() => {
+                          handleDelete(record);
+                        }}
+                        title="Delete Project"
+                        danger
+                        variant="solid"
+                        icon={<DeleteOutlined />}
+                      ></Button>
+                    </Tooltip>
+                  ) : null}
+                </>
+              );
+            },
+          },
+        ]}
         dataSource={projectState.rowsData}
         loading={loading}
         scroll={{

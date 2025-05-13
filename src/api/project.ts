@@ -2,6 +2,10 @@
 
 import axiosI from "./axios";
 
+/**
+ * Get list of projects
+ * @returns
+ */
 const getListOfProjectsApi = async () => {
   const { data } = await axiosI.get<GetProjectResponse>(
     "projects?page=1&size=1000"
@@ -24,4 +28,9 @@ const deleteProjectApi = async (id: number | string) => {
   return data;
 };
 
-export { getListOfProjectsApi, createProjectApi, updateProjectApi, deleteProjectApi };
+export {
+  getListOfProjectsApi,
+  createProjectApi,
+  updateProjectApi,
+  deleteProjectApi,
+};
