@@ -1,37 +1,76 @@
-import { Button, DatePicker, Form, Input, Modal, Select } from "antd";
-import React from "react";
+import { Button, Form, Input, message, Modal, Select } from "antd";
+import React, { useEffect, useState } from "react";
+import { getListOfProjectsApi } from "../../api/project";
+import { createTaskApi, updateTaskApi } from "../../api/task";
 
 interface TaskData {
+  title: string;
   description: string;
-  dueDate: string;
-  status: string;
-  owner: string;
-  project: string;
-}
-interface Option {
-  id: string;
-  name: string;
+  project: number;
 }
 
 interface Props {
   open: true | false;
   close: () => void;
   onSubmit: (data: TaskData) => void; 
-  owners: Option[];
-  projects: Option[];
+  editingTask: Task | null;
 
 }
-const TaskCreateForm: React.FC<Props> = ({ open, close, onSubmit, owners = [], projects = []}) => {
+const TaskCreateForm: React.FC<Props> = ({ open, close, onSubmit, editingTask }) => {
   const [form] = Form.useForm();
-  const handleFinish = (values: TaskData) => {
-    onSubmit(values);
-    form.resetFields();
-    close();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  useEffect(() => {
+    if (open) {
+      if (editingTask) {
+        form.setFieldsValue({
+          title: editingTask.title,
+          description: editingTask.description,
+          project: editingTask.project,
+        });
+      }
+      else {
+        form.resetFields();
+      }
+    }
+    fetchProjects()
+  }, [open, editingTask]);
+  const fetchProjects = async () => {
+    setLoading(true);
+    try {
+      const data = await getListOfProjectsApi();
+      setProjects(data.records || []); 
+      const mappedProjects: any[] = data.records.map((project: any) => ({
+        id: project.id,
+        name: project.name,
+        description: project.description,
+      }));
+      setProjects(mappedProjects);
+    } catch (error) {
+      console.error("Failed to fetch projects", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFinish = async (values: TaskData) => {
+    try {
+      const taskData : TaskBody = {
+        title: values.title,
+        description: values.description,
+        project:  values.project
+      };
+      onSubmit(taskData); 
+      form.resetFields();
+      close();
+    } catch (error) {
+      console.error("Failed to create task", error);
+    }
   };
 
   return (
     <Modal
-      title="Create new task"
+      title={editingTask ? "Edit Task" : "Create New Task"}
       open={open}
       onCancel={close}
       footer={null}
@@ -44,45 +83,18 @@ const TaskCreateForm: React.FC<Props> = ({ open, close, onSubmit, owners = [], p
         initialValues={{ status: 'To Do' }}
       >
         <Form.Item
+          label="Title"
+          name="title"
+          rules={[{ required: true, message: 'Please enter a title' }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
           label="Description"
           name="description"
           rules={[{ required: true, message: 'Please enter a description' }]}
         >
           <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Due Date"
-          name="dueDate"
-          rules={[{ required: true, message: 'Please select a due date' }]}
-        >
-          <DatePicker style={{ width: '100%' }} />
-        </Form.Item>
-
-        <Form.Item
-          label="Status"
-          name="status"
-          rules={[{ required: true }]}
-        >
-          <Select>
-            <Select.Option value="To Do">To Do</Select.Option>
-            <Select.Option value="In Progress">In Progress</Select.Option>
-            <Select.Option value="Done">Done</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          label="Owner"
-          name="owner"
-          rules={[{ required: true, message: 'Please select an owner' }]}
-        >
-          <Select placeholder="Select owner">
-            {owners.map(owner => (
-              <Select.Option key={owner.id} value={owner.id}>
-                {owner.name}
-              </Select.Option>
-            ))}
-          </Select>
         </Form.Item>
 
         <Form.Item
@@ -101,7 +113,7 @@ const TaskCreateForm: React.FC<Props> = ({ open, close, onSubmit, owners = [], p
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Create Task
+            {editingTask ? "Update Task" : "Create Task"}
           </Button>
         </Form.Item>
       </Form>
