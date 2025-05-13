@@ -9,6 +9,8 @@ import LoginContainer from "../container/loginContainer";
 import ProjectContainer from "../container/projectContainer";
 import TaskContainer from "../container/taskContainer";
 import UserContainer from "../container/usersContainer";
+import { authenticateProfileAction } from "../slice/reducer/auth";
+import usePermission from "../hooks/usePermission";
 
 export const AppRoutes = () => {
   // Authentication will be implemented later on
@@ -20,6 +22,11 @@ export const AppRoutes = () => {
   React.useEffect(() => {
     if (isAuthenticated) dispatch(getProjectsAction());
   }, [dispatch, isAuthenticated]);
+  React.useEffect(() => {
+    dispatch(authenticateProfileAction());
+  }, [dispatch]);
+
+  const { users } = usePermission();
   return (
     <>
       <Suspense fallback={<>Loading....</>}>
@@ -30,7 +37,9 @@ export const AppRoutes = () => {
                 <Route index element={<>Dashboard</>} />
                 <Route path="/projects" element={<ProjectContainer />} />
                 <Route path="/tasks" element={<TaskContainer />} />
-                <Route path="/users" element={<UserContainer />} />
+                {users.read ? (
+                  <Route path="/users" element={<UserContainer />} />
+                ) : null}
               </Route>
             ) : (
               <Route path="/">

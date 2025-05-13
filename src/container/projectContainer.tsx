@@ -9,7 +9,6 @@ import { ProjectAction } from "../models/ProjectAction";
 import { useAppSelector } from "../slice";
 import UpdateNewProject from "../components/projects/updateForm";
 import DeleteProject from "../components/projects/deleteForm";
-// import { ColumnsType } from "antd/es/table";
 
 // Reducer Initial State
 const initialState: ProjectState = {
@@ -191,17 +190,20 @@ const ProjectContainer = () => {
       <ActionHeader
         title="Projects"
         children={
-          <Button
-            hidden={!projects.create}
-            icon={<PlusOutlined />}
-            variant="filled"
-            color="volcano"
-            onClick={() =>
-              dispatchProjectState({ type: "PROJ_FORM", payload: true })
-            }
-          >
-            Create New Projects
-          </Button>
+          projects.create ? (
+            <Button
+              icon={<PlusOutlined />}
+              variant="filled"
+              color="volcano"
+              onClick={() =>
+                dispatchProjectState({ type: "PROJ_FORM", payload: true })
+              }
+            >
+              Create New Projects
+            </Button>
+          ) : (
+            <></>
+          )
         }
       />
 

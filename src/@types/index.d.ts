@@ -30,3 +30,25 @@ interface UpdatePayload {
   id: number | string;
   body: ProjectBody;
 }
+
+interface UserApiResponse {
+  totalCount: number;
+  records: User[];
+  totalPages: number;
+  currentPage: number;
+}
+
+interface User {
+  id: number;
+  name: string;
+  profileImage: string;
+  role: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface UserUpdateBody {
+  role: string;
+  name: string;
+}
