@@ -1,34 +1,23 @@
 import { Button, Table, Typography, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TaskCreateForm from "../components/tasks/createForm";
 import ActionHeader from "../components/actionHeader";
 import { deleteProjectApi } from "../api/project";
-import { getListOfTasksApi, updateTaskApi, createTaskApi } from "../api/task";
+import { updateTaskApi, createTaskApi } from "../api/task";
+import { useAppDispatch, useAppSelector } from "../slice";
+import { getTaskListAction } from "../slice/reducer/task";
 
 const { Title } = Typography;
 
 const TaskContainer = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(false);
+  // const [tasks, setTasks] = useState<Task[]>([]);
+  const { task, loading } = useAppSelector((a) => a.task);
+  // const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
-  const fetchTasks = async () => {
-    try {
-      setLoading(true);
-      const res = await getListOfTasksApi();
-      setTasks(res.records || []);
-    } catch (error) {
-      message.error("Failed to load tasks");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  const dispatch = useAppDispatch();
 
   const handleCreate = async (data: any) => {
     try {
@@ -46,12 +35,15 @@ const TaskContainer = () => {
       message.error("Failed to save task");
     }
   };
+  React.useEffect(() => {
+    dispatch(getTaskListAction());
+  }, [dispatch]);
 
   const handleDelete = async (id: number) => {
     try {
       await deleteProjectApi(id);
       message.success("Task deleted successfully");
-      fetchTasks(); // Refresh
+      dispatch(getTaskListAction());
     } catch (error) {
       message.error("Failed to delete task");
     }
@@ -66,22 +58,22 @@ const TaskContainer = () => {
     {
       title: "Title",
       dataIndex: "title",
-      key: "title"
+      key: "title",
     },
     {
       title: "Description",
       dataIndex: "description",
-      key: "description"
+      key: "description",
     },
     {
       title: "Status",
       dataIndex: "status",
-      key: "status"
+      key: "status",
     },
     {
       title: "Project",
       dataIndex: "project",
-      key: "project"
+      key: "project",
     },
     {
       title: "Actions",
@@ -95,8 +87,8 @@ const TaskContainer = () => {
             Delete
           </Button>
         </>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -121,7 +113,7 @@ const TaskContainer = () => {
       </Title>
       <Table
         columns={columns}
-        dataSource={tasks}
+        dataSource={task?.records || []}
         rowKey="id"
         loading={loading}
         pagination={false}
