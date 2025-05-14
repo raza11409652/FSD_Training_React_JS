@@ -1,7 +1,6 @@
-import { Button, Form, Input, message, Modal, Select } from "antd";
+import { Button, Form, Input, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { getListOfProjectsApi } from "../../api/project";
-import { createTaskApi, updateTaskApi } from "../../api/task";
 
 interface TaskData {
   title: string;

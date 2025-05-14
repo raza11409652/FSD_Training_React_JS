@@ -12,9 +12,7 @@ const { Title } = Typography;
 
 const TaskContainer = () => {
   const { tasks } = usePermission();
-  // const [tasks, setTasks] = useState<Task[]>([]);
   const { task, loading } = useAppSelector((a) => a.task);
-  // const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
@@ -39,16 +37,6 @@ const TaskContainer = () => {
   React.useEffect(() => {
     dispatch(getTaskListAction());
   }, [dispatch]);
-
-  // const handleDelete = async (task: any) => {
-  //   try {
-  //     await deleteTaskApi(task.id);
-  //     message.success("Task deleted successfully");
-  //     dispatch(getTaskListAction());
-  //   } catch (error) {
-  //     message.error("Failed to delete task");
-  //   }
-  // };
   const handleDelete = (record: Task) => {
   Modal.confirm({
     title: (
@@ -62,7 +50,7 @@ const TaskContainer = () => {
     okText: 'Delete',
     onOk: async () => {
       try {
-        await deleteTaskApi(record.id);  // Assuming `deleteTaskApi` is a function to delete the task
+        await deleteTaskApi(record.id); 
         message.success("Task deleted successfully");
         dispatch(getTaskListAction());
       } catch (error) {
