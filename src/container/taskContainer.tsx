@@ -30,7 +30,7 @@ const TaskContainer = () => {
       }
       setOpen(false);
       setEditingTask(null);
-      fetchTasks(); // Refresh the list
+      dispatch(getTaskListAction());
     } catch (error) {
       message.error("Failed to save task");
     }
