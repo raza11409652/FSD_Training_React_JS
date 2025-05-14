@@ -23,14 +23,14 @@ const UserContainer = () => {
     dispatch(setCurrentUserAction(user));
     setOpen(true);
   };
-  const handleClose = (type: "edit" | "new") => {
+  const handleClose = (type: "edit" | "new", refresh = true) => {
     if (type === "edit") {
       dispatch(setCurrentUserAction());
       setOpen(false);
     } else {
       setOpenNewUser(false);
     }
-    dispatch(getUserListAction());
+    if (refresh) dispatch(getUserListAction());
   };
   return (
     <>
@@ -103,6 +103,7 @@ const UserContainer = () => {
         ]}
       />
       <Modal
+        destroyOnClose
         open={open}
         children={
           user ? (
@@ -112,7 +113,7 @@ const UserContainer = () => {
           )
         }
         title="Update user details"
-        onCancel={() => setOpen(false)}
+        onCancel={() => handleClose("edit", false)}
         footer={null}
       />
       <Modal
