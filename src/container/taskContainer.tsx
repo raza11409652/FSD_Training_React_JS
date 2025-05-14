@@ -1,10 +1,9 @@
-import { Button, Table, Typography, message } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button, Modal, Table, Typography, message } from "antd";
+import { PlusOutlined, WarningTwoTone } from "@ant-design/icons";
 import React, { useState } from "react";
 import TaskCreateForm from "../components/tasks/createForm";
 import ActionHeader from "../components/actionHeader";
-import { deleteProjectApi } from "../api/project";
-import { updateTaskApi, createTaskApi } from "../api/task";
+import { updateTaskApi, createTaskApi, deleteTaskApi } from "../api/task";
 import { useAppDispatch, useAppSelector } from "../slice";
 import { getTaskListAction } from "../slice/reducer/task";
 import usePermission from "../hooks/usePermission";
@@ -13,9 +12,7 @@ const { Title } = Typography;
 
 const TaskContainer = () => {
   const { tasks } = usePermission();
-  // const [tasks, setTasks] = useState<Task[]>([]);
   const { task, loading } = useAppSelector((a) => a.task);
-  // const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
@@ -40,16 +37,40 @@ const TaskContainer = () => {
   React.useEffect(() => {
     dispatch(getTaskListAction());
   }, [dispatch]);
-
-  const handleDelete = async (id: number) => {
-    try {
-      await deleteProjectApi(id);
-      message.success("Task deleted successfully");
-      dispatch(getTaskListAction());
-    } catch (error) {
-      message.error("Failed to delete task");
-    }
-  };
+  const handleDelete = (record: Task) => {
+  Modal.confirm({
+    title: (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span>Delete Task?</span>
+        <WarningTwoTone style={{ marginLeft: '10px', color: 'orange' }} />
+      </div>
+    ),
+    icon: null,
+    content: record.title,
+    okText: 'Delete',
+    onOk: async () => {
+      try {
+        await deleteTaskApi(record.id); 
+        message.success("Task deleted successfully");
+        dispatch(getTaskListAction());
+      } catch (error) {
+        message.error("Failed to delete task");
+      }
+    },
+    cancelButtonProps: {
+      style: { display: 'none' }, 
+    },
+    okButtonProps: {
+      danger: true,
+      style: {
+        float: 'left',
+        marginRight: '10px',
+        marginInlineStart: 0
+      },
+    },
+    closable: true,
+  });
+};
 
   const handleEdit = (task: Task) => {
     setEditingTask(task);
@@ -85,7 +106,7 @@ const TaskContainer = () => {
           <Button type="link" onClick={() => handleEdit(record)}>
             Edit
           </Button>
-          <Button danger type="link" onClick={() => handleDelete(record.id)}>
+          <Button danger type="link" onClick={() => handleDelete(record)}>
             Delete
           </Button>
         </>
