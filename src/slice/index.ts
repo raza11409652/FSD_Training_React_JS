@@ -3,6 +3,8 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import projectReducer from "./reducer/project";
 import authReducer from "./reducer/auth";
 import userReducer from "./reducer/user";
+import taskReducer from "./reducer/task";
+
 // import { useReducer } from "react";
 
 export const store = configureStore({
@@ -10,6 +12,7 @@ export const store = configureStore({
     project: projectReducer,
     auth: authReducer,
     user: userReducer,
+    task: taskReducer,
   },
 });
 

@@ -30,7 +30,27 @@ interface UpdatePayload {
   id: number | string;
   body: ProjectBody;
 }
+interface GetTaskResponse{
+  totalCount: number;
+  records: Task[];
+  totalPages: number;
+  currentPage: number;
+}
+interface Task{
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+  project: number;
+  createdAt: string;
+  updatedAt: string;
+}
+interface TaskBody {
+  title: string;
+  description: string;
+  project: number
 
+}
 interface UserApiResponse {
   totalCount: number;
   records: User[];
