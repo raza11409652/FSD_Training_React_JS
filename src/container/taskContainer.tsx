@@ -7,10 +7,12 @@ import { deleteProjectApi } from "../api/project";
 import { updateTaskApi, createTaskApi } from "../api/task";
 import { useAppDispatch, useAppSelector } from "../slice";
 import { getTaskListAction } from "../slice/reducer/task";
+import usePermission from "../hooks/usePermission";
 
 const { Title } = Typography;
 
 const TaskContainer = () => {
+  const { tasks } = usePermission();
   // const [tasks, setTasks] = useState<Task[]>([]);
   const { task, loading } = useAppSelector((a) => a.task);
   // const [loading, setLoading] = useState(false);
@@ -96,16 +98,20 @@ const TaskContainer = () => {
       <ActionHeader
         title="Tasks"
         children={
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              setEditingTask(null); // Reset form for new task
-              setOpen(true);
-            }}
-          >
-            Create new task
-          </Button>
+          tasks.create ? (
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                setEditingTask(null); // Reset form for new task
+                setOpen(true);
+              }}
+            >
+              Create new task
+            </Button>
+          ) : (
+            <></>
+          )
         }
       />
       <Title level={3} style={{ marginTop: 20 }}>
