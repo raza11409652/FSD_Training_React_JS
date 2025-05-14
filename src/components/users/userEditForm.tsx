@@ -1,4 +1,4 @@
-import { Button, Form, Input, message, Select } from "antd";
+import { Button, Form, Input, message, Select, Typography } from "antd";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../slice";
 import { updateUserAction } from "../../slice/reducer/user";
@@ -36,6 +36,7 @@ const UserEditForm: React.FC<Props> = ({ user, close }) => {
         requiredMark={false}
         onFinish={handleUpdate}
       >
+        <Typography.Text>Email - {user.email || "-"}</Typography.Text>
         <Form.Item
           name={"name"}
           label="Name"
