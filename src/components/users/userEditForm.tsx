@@ -36,7 +36,9 @@ const UserEditForm: React.FC<Props> = ({ user, close }) => {
         requiredMark={false}
         onFinish={handleUpdate}
       >
-        <Typography.Text>Email - {user.email || "-"}</Typography.Text>
+        <Form.Item>
+          <Typography.Text>Email - {user.email || "-"}</Typography.Text>
+        </Form.Item>
         <Form.Item
           name={"name"}
           label="Name"
