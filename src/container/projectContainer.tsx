@@ -279,12 +279,15 @@ const ProjectContainer = () => {
                         title="Edit Project"
                         variant="text"
                         icon={<EditOutlined />}
-                      ></Button>
+                      >
+                        Edit
+                      </Button>
                     </Tooltip>
                   ) : null}
                   {projects.delete ? (
-                    <Tooltip title="Edit Project">
+                    <Tooltip title={`Delete Project -  ${record.name}`}>
                       <Button
+                        style={{ marginLeft: "10px" }}
                         onClick={() => {
                           handleDelete(record);
                         }}
@@ -292,7 +295,9 @@ const ProjectContainer = () => {
                         danger
                         variant="solid"
                         icon={<DeleteOutlined />}
-                      ></Button>
+                      >
+                        Delete
+                      </Button>
                     </Tooltip>
                   ) : null}
                 </>

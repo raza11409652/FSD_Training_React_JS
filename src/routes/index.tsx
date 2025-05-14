@@ -11,6 +11,7 @@ import TaskContainer from "../container/taskContainer";
 import UserContainer from "../container/usersContainer";
 import { authenticateProfileAction } from "../slice/reducer/auth";
 import usePermission from "../hooks/usePermission";
+// import DashboardContainer from "../container/dashboardContainer";
 
 export const AppRoutes = () => {
   // Authentication will be implemented later on
@@ -34,7 +35,7 @@ export const AppRoutes = () => {
           <Routes>
             {isAuthenticated ? (
               <Route path="/" element={<HomeContainer />}>
-                <Route index element={<>Dashboard</>} />
+                <Route index element={<Navigate to={"/projects"} />} />
                 <Route path="/projects" element={<ProjectContainer />} />
                 <Route path="/tasks" element={<TaskContainer />} />
                 {users.read ? (

@@ -52,3 +52,7 @@ interface UserUpdateBody {
   role: string;
   name: string;
 }
+
+interface UserCreateBody extends UserUpdateBody {
+  email: string;
+}

@@ -1,4 +1,4 @@
-import { Button, message, Modal, Spin, Table } from "antd";
+import { Button, Modal, Spin, Table } from "antd";
 import ActionHeader from "../components/actionHeader";
 import usePermission from "../hooks/usePermission";
 import { EditFilled, PlusOutlined } from "@ant-design/icons";
@@ -6,9 +6,12 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../slice";
 import { getUserListAction, setCurrentUserAction } from "../slice/reducer/user";
 import UserEditForm from "../components/users/userEditForm";
+import UserCreateForm from "../components/users/userCreateForm";
 
 const UserContainer = () => {
   const [open, setOpen] = React.useState(false);
+  const [openNewUser, setOpenNewUser] = React.useState(false);
+
   const { loading, userResponse, user } = useAppSelector((a) => a.user);
   const { users } = usePermission();
   const dispatch = useAppDispatch();
@@ -22,8 +25,8 @@ const UserContainer = () => {
   };
   const handleClose = () => {
     setOpen(false);
+    setOpenNewUser(false);
     dispatch(getUserListAction());
-    message.open({ type: "success", content: "Profile updated" });
   };
   return (
     <>
@@ -31,6 +34,7 @@ const UserContainer = () => {
         children={
           <>
             <Button
+              onClick={() => setOpenNewUser(true)}
               icon={<PlusOutlined />}
               variant="solid"
               hidden={!users.create}
@@ -46,6 +50,7 @@ const UserContainer = () => {
         dataSource={userResponse?.records || []}
         pagination={false}
         loading={loading}
+        scroll={{ y: "70vh" }}
         columns={[
           {
             dataIndex: "id",
@@ -99,6 +104,13 @@ const UserContainer = () => {
         }
         title="Update user details"
         onCancel={() => setOpen(false)}
+        footer={null}
+      />
+      <Modal
+        open={openNewUser}
+        children={<UserCreateForm close={handleClose} />}
+        title="Add new user"
+        onCancel={() => setOpenNewUser(false)}
         footer={null}
       />
     </>

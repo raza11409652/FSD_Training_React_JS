@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, message, Select } from "antd";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../slice";
 import { updateUserAction } from "../../slice/reducer/user";
@@ -19,9 +19,14 @@ const UserEditForm: React.FC<Props> = ({ user, close }) => {
     { key: "USER", title: "User" },
   ];
   const handleUpdate = (b: UserUpdateBody) => {
-    dispatch(updateUserAction({ body: b, id: String(user.id) })).then(() => {
-      close();
-    });
+    dispatch(updateUserAction({ body: b, id: String(user.id) })).then(
+      (data) => {
+        if (data.meta.requestStatus === "fulfilled") {
+          message.open({ type: "success", content: "Profile updated" });
+          close();
+        }
+      }
+    );
   };
   return (
     <>

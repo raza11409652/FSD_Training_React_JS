@@ -6,8 +6,23 @@ const getUserRecords = async () => {
   return data;
 };
 
+/**
+ *
+ * @param body
+ * @param id
+ * @returns
+ */
 const updateUserData = async (body: UserUpdateBody, id: string) => {
   const { data } = await axiosI.put(`users/${id}`, body);
   return data;
 };
-export { getUserRecords, updateUserData };
+/**
+ *
+ * @param body
+ * @returns
+ */
+const createUser = async (body: UserCreateBody) => {
+  const { data } = await axiosI.post(`users`, body);
+  return data;
+};
+export { getUserRecords, updateUserData, createUser };
