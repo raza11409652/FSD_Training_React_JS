@@ -117,6 +117,7 @@ const UserContainer = () => {
         footer={null}
       />
       <Modal
+        destroyOnClose
         open={openNewUser}
         children={<UserCreateForm close={() => handleClose("new")} />}
         title="Add new user"
