@@ -11,14 +11,19 @@ interface TaskData {
 interface Props {
   open: true | false;
   close: () => void;
-  onSubmit: (data: TaskData) => void; 
+  onSubmit: (data: TaskData) => void;
   editingTask: Task | null;
-
 }
-const TaskCreateForm: React.FC<Props> = ({ open, close, onSubmit, editingTask }) => {
+const TaskCreateForm: React.FC<Props> = ({
+  open,
+  close,
+  onSubmit,
+  editingTask,
+}) => {
   const [form] = Form.useForm();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  console.log(loading);
   useEffect(() => {
     if (open) {
       if (editingTask) {
@@ -27,18 +32,17 @@ const TaskCreateForm: React.FC<Props> = ({ open, close, onSubmit, editingTask })
           description: editingTask.description,
           project: editingTask.project,
         });
-      }
-      else {
+      } else {
         form.resetFields();
       }
     }
-    fetchProjects()
+    fetchProjects();
   }, [open, editingTask]);
   const fetchProjects = async () => {
     setLoading(true);
     try {
       const data = await getListOfProjectsApi();
-      setProjects(data.records || []); 
+      setProjects(data.records || []);
       const mappedProjects: any[] = data.records.map((project: any) => ({
         id: project.id,
         name: project.name,
@@ -54,12 +58,12 @@ const TaskCreateForm: React.FC<Props> = ({ open, close, onSubmit, editingTask })
 
   const handleFinish = async (values: TaskData) => {
     try {
-      const taskData : TaskBody = {
+      const taskData: TaskBody = {
         title: values.title,
         description: values.description,
-        project:  values.project
+        project: values.project,
       };
-      onSubmit(taskData); 
+      onSubmit(taskData);
       form.resetFields();
       close();
     } catch (error) {
@@ -79,19 +83,19 @@ const TaskCreateForm: React.FC<Props> = ({ open, close, onSubmit, editingTask })
         form={form}
         layout="vertical"
         onFinish={handleFinish}
-        initialValues={{ status: 'To Do' }}
+        initialValues={{ status: "To Do" }}
       >
         <Form.Item
           label="Title"
           name="title"
-          rules={[{ required: true, message: 'Please enter a title' }]}
+          rules={[{ required: true, message: "Please enter a title" }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           label="Description"
           name="description"
-          rules={[{ required: true, message: 'Please enter a description' }]}
+          rules={[{ required: true, message: "Please enter a description" }]}
         >
           <Input />
         </Form.Item>
@@ -99,10 +103,10 @@ const TaskCreateForm: React.FC<Props> = ({ open, close, onSubmit, editingTask })
         <Form.Item
           label="Project"
           name="project"
-          rules={[{ required: true, message: 'Please select a project' }]}
+          rules={[{ required: true, message: "Please select a project" }]}
         >
           <Select placeholder="Select project">
-            {projects.map(project => (
+            {projects.map((project) => (
               <Select.Option key={project.id} value={project.id}>
                 {project.name}
               </Select.Option>
