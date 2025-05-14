@@ -33,14 +33,15 @@ const UserContainer = () => {
       <ActionHeader
         children={
           <>
-            <Button
-              onClick={() => setOpenNewUser(true)}
-              icon={<PlusOutlined />}
-              variant="solid"
-              hidden={!users.create}
-            >
-              Add new user
-            </Button>
+            {users.create ? (
+              <Button
+                onClick={() => setOpenNewUser(true)}
+                icon={<PlusOutlined />}
+                variant="solid"
+              >
+                Add new user
+              </Button>
+            ) : null}
           </>
         }
         title="User management"
