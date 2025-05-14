@@ -7,6 +7,7 @@ interface GetProjectResponse {
 interface Project {
   id: number;
   name: string;
+  description?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -48,4 +49,30 @@ interface TaskBody {
   title: string;
   description: string;
   project: number
+
+}
+interface UserApiResponse {
+  totalCount: number;
+  records: User[];
+  totalPages: number;
+  currentPage: number;
+}
+
+interface User {
+  id: number;
+  name: string;
+  profileImage: string;
+  role: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface UserUpdateBody {
+  role: string;
+  name: string;
+}
+
+interface UserCreateBody extends UserUpdateBody {
+  email: string;
 }

@@ -5,6 +5,7 @@ import {
   getListOfProjectsApi,
   updateProjectApi,
 } from "../../api/project";
+import handleAxiosError from "../../utils/axiosError";
 interface Props {
   project?: GetProjectResponse;
   loading: boolean;
@@ -19,8 +20,9 @@ export const getProjectsAction = createAsyncThunk<GetProjectResponse, void>(
     try {
       const response = getListOfProjectsApi();
       return response;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      handleAxiosError(e);
       return rejectWithValue("ERROR");
     }
   }
@@ -31,7 +33,9 @@ export const createProjectAction = createAsyncThunk<void, ProjectBody>(
     try {
       const response = createProjectApi(body);
       return response;
-    } catch (er) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (er: any) {
+      handleAxiosError(er);
       return rejectWithValue(er);
     }
   }
@@ -43,7 +47,9 @@ export const updateProjectAction = createAsyncThunk<void, UpdatePayload>(
     try {
       const response = await updateProjectApi(id, body);
       return response;
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      handleAxiosError(error);
       return rejectWithValue(error);
     }
   }

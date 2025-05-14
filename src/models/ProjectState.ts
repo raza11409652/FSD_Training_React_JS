@@ -1,11 +1,12 @@
 interface ProjectState {
-    rowsData: any,
-    projForm: boolean,
-    updateForm: boolean,
-    projectData: any,
-    deleteForm: boolean,
-    deleteID: any,
-    projectColumns: any
+  rowsData: Project[];
+  projForm: boolean;
+  updateForm: boolean;
+  projectData: Partial<Project>;
+  deleteForm: boolean;
+  deleteID: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  projectColumns:Array<any>;
 }
 
-export type { ProjectState }
+export type { ProjectState };

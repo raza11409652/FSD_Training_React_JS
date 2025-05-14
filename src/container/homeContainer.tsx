@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Layout, theme } from "antd";
+import { Button, Layout, Spin, theme, Typography } from "antd";
 import { Outlet } from "react-router-dom";
 import { LogoutOutlined } from "@ant-design/icons";
-import { useAppDispatch } from "../slice";
+import { useAppDispatch, useAppSelector } from "../slice";
 import { logoutAction } from "../slice/reducer/auth";
 import SideMenu from "../components/sideMenu";
 const { Header, Content, Sider } = Layout;
@@ -13,6 +13,9 @@ const App: React.FC = () => {
     token: { colorBgContainer, colorWhite },
   } = theme.useToken();
   const logoutClickHandler = () => dispatch(logoutAction());
+  const userProfile = useAppSelector((a) => a.auth.user);
+  const isLoading = useAppSelector((a) => a.auth.loading);
+
   return (
     <Layout style={{ height: "100vh" }}>
       <Sider collapsedWidth="0" style={{ background: colorWhite }}>
@@ -32,6 +35,13 @@ const App: React.FC = () => {
               >
                 Logout
               </Button>
+              {isLoading ? (
+                <Spin />
+              ) : (
+                <Typography.Text style={{ marginRight: "10px" }}>
+                  {userProfile?.email || ""} - ({userProfile?.role || ""})
+                </Typography.Text>
+              )}
             </div>
           }
         />

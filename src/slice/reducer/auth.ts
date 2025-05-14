@@ -5,6 +5,7 @@ import {
   getItemFromLocal,
   setItemInLocal,
 } from "../../utils/localStorage";
+import handleAxiosError from "../../utils/axiosError";
 const IS_AUTH = "is-authenticated";
 const PROFILE = "user-profile";
 
@@ -25,7 +26,9 @@ export const authenticateProfileAction = createAsyncThunk<UserProfile, void>(
     try {
       const response = getUserProfile();
       return response;
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      handleAxiosError(e);
       return rejectWithValue(e);
     }
   }

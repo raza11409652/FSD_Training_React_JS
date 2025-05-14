@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import {
-  HomeOutlined,
+  // HomeOutlined,
   SettingOutlined,
   FileOutlined,
   UserOutlined,
@@ -12,12 +12,12 @@ const SideMenu = () => {
   return (
     <div className="app-side-menu">
       <ul>
-        <li>
+        {/* <li>
           <NavLink to={"/"}>
             <HomeOutlined />
             <span className="label">Home</span>
           </NavLink>
-        </li>
+        </li> */}
         <li>
           <NavLink to={"/projects"}>
             <SettingOutlined />
