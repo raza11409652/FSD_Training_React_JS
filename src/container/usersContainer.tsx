@@ -23,9 +23,13 @@ const UserContainer = () => {
     dispatch(setCurrentUserAction(user));
     setOpen(true);
   };
-  const handleClose = () => {
-    setOpen(false);
-    setOpenNewUser(false);
+  const handleClose = (type: "edit" | "new") => {
+    if (type === "edit") {
+      dispatch(setCurrentUserAction());
+      setOpen(false);
+    } else {
+      setOpenNewUser(false);
+    }
     dispatch(getUserListAction());
   };
   return (
@@ -101,7 +105,11 @@ const UserContainer = () => {
       <Modal
         open={open}
         children={
-          user ? <UserEditForm user={user} close={handleClose} /> : <Spin />
+          user ? (
+            <UserEditForm user={user} close={() => handleClose("edit")} />
+          ) : (
+            <Spin />
+          )
         }
         title="Update user details"
         onCancel={() => setOpen(false)}
@@ -109,7 +117,7 @@ const UserContainer = () => {
       />
       <Modal
         open={openNewUser}
-        children={<UserCreateForm close={handleClose} />}
+        children={<UserCreateForm close={() => handleClose("new")} />}
         title="Add new user"
         onCancel={() => setOpenNewUser(false)}
         footer={null}
