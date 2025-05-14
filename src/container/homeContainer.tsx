@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Layout, theme, Typography } from "antd";
+import { Button, Layout, Spin, theme, Typography } from "antd";
 import { Outlet } from "react-router-dom";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../slice";
@@ -14,6 +14,8 @@ const App: React.FC = () => {
   } = theme.useToken();
   const logoutClickHandler = () => dispatch(logoutAction());
   const userProfile = useAppSelector((a) => a.auth.user);
+  const isLoading = useAppSelector((a) => a.auth.loading);
+
   return (
     <Layout style={{ height: "100vh" }}>
       <Sider collapsedWidth="0" style={{ background: colorWhite }}>
@@ -33,9 +35,13 @@ const App: React.FC = () => {
               >
                 Logout
               </Button>
-              <Typography.Text style={{ marginRight: "10px" }}>
-                {userProfile?.name || ""} - ({userProfile?.role || ""})
-              </Typography.Text>
+              {isLoading ? (
+                <Spin />
+              ) : (
+                <Typography.Text style={{ marginRight: "10px" }}>
+                  {userProfile?.email || ""} - ({userProfile?.role || ""})
+                </Typography.Text>
+              )}
             </div>
           }
         />
