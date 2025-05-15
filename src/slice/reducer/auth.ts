@@ -52,6 +52,7 @@ const authSlice = createSlice({
     });
     b.addCase(authenticateProfileAction.rejected, (s) => {
       s.isAuthenticated = false;
+      s.loading = false;
     });
     b.addCase(authenticateProfileAction.fulfilled, (s, { payload }) => {
       s.isAuthenticated = true;

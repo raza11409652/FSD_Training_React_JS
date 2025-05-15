@@ -14,8 +14,8 @@ const AuthInitContainer = () => {
   React.useEffect(() => {
     // This should be added into local-storage
     if (session && refresh) {
-      setItemInLocal("session-token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyY2hpLnNyaXZhc3RhdmFAdGlnZXJhbmFseXRpY3MuY29tIiwicm9sZSI6IkFETUlOIiwidHlwZSI6IlNFU1NJT04iLCJpZCI6MywiaWF0IjoxNzQ3MjEyNzcxLCJleHAiOjE3NDc0NzE5NzF9.3ez4r8ZgWeiRKjAr7y9oDeM3TPcySp2mE6N_WV5N3pQ");
-      setItemInLocal("refresh-token", session);
+      setItemInLocal("session-token", session);
+      setItemInLocal("refresh-token", refresh);
       // dispatch(authenticateProfileAction()).then((a) => {
       //   if (a.meta.requestStatus === "fulfilled") {
       //
