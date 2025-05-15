@@ -40,14 +40,21 @@ interface Task{
   id: number;
   title: string;
   description: string;
+  dueDate?: string;
   status: string;
-  project: number;
+  assignedTo?: number;
+  project: number
   createdAt: string;
   updatedAt: string;
+  createdBy: string;
+  project?: number
 }
 interface TaskBody {
   title: string;
   description: string;
+  dueDate?: string;
+  status: string;
+  assignedTo?: number;
   project: number
 
 }

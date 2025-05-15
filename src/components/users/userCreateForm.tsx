@@ -8,9 +8,9 @@ interface Props {
 const UserCreateForm: React.FC<Props> = ({ close }) => {
   const initialValues: UserCreateBody = { email: "", name: "", role: "" };
   const roles = [
-    { key: "ADMIN", title: "Admin" },
-    { key: "TASK_CREATOR", title: "Task Creator" },
-    { key: "USER", title: "User" },
+    { key: "ADMIN", title: "ADMIN" },
+    { key: "TASK_CREATOR", title: "TASK_CREATOR" },
+    { key: "USER", title: "USER" },
   ];
   const loading = useAppSelector((a) => a.user.loadingCreate);
   const dispatch = useAppDispatch();
