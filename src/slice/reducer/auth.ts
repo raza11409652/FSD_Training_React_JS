@@ -8,6 +8,7 @@ import {
 import handleAxiosError from "../../utils/axiosError";
 const IS_AUTH = "is-authenticated";
 const PROFILE = "user-profile";
+const SESSION_TOKEN = "user-profile";
 
 interface Props {
   isAuthenticated: boolean;
@@ -20,19 +21,20 @@ const initialState: Props = {
   user: getItemFromLocal(PROFILE) || undefined,
 };
 
-export const authenticateProfileAction = createAsyncThunk<UserProfile, void>(
-  "authenticateProfile",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = getUserProfile();
-      return response;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-      handleAxiosError(e);
-      return rejectWithValue(e);
-    }
+export const authenticateProfileAction = createAsyncThunk<
+  UserProfile | null,
+  void
+>("authenticateProfile", async (_, { rejectWithValue }) => {
+  try {
+    const token = getItemFromLocal(SESSION_TOKEN);
+    const response = token ? getUserProfile() : null;
+    return response;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    handleAxiosError(e);
+    return rejectWithValue(e);
   }
-);
+});
 const authSlice = createSlice({
   name: "auth-slice",
   initialState: initialState,
