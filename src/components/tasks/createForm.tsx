@@ -20,7 +20,6 @@ const TaskCreateForm: React.FC<Props> = ({
   editingTask,
   users
 }) => {
-  const { tasks } = usePermission();
   const [form] = Form.useForm();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
