@@ -212,7 +212,13 @@ const TaskContainer = () => {
         dataSource={task?.records || []}
         rowKey="id"
         loading={loading}
-        pagination={false}
+        scroll={{
+          x: 300,
+          y: 300,
+        }}
+        pagination={{
+          pageSize: 10,
+        }}
         locale={{ emptyText: "No tasks available" }}
       />
       <TaskCreateForm
