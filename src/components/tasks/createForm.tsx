@@ -135,11 +135,13 @@ const TaskCreateForm: React.FC<Props> = ({
           name="assignedTo"
         >
           <Select disabled={isReadOnlyUser} placeholder="Select owner">
-            {owners.map((owner) => (
-              <Select.Option key={owner.id} value={owner.id}>
-                {owner.name}
-              </Select.Option>
-            ))}
+            {owners
+              .filter(owner => userProfile && owner.id !== userProfile.id) 
+              .map((owner) => (
+                <Select.Option key={owner.id} value={owner.id}>
+                  {owner.name}
+                </Select.Option>
+              ))}
           </Select>
         </Form.Item>
 
