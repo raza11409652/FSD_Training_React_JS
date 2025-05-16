@@ -17,7 +17,7 @@ const usePermission = () => {
       tasks: {
         read: true,
         create: role === "ADMIN" || role === "TASK_CREATOR",
-        update: role === "ADMIN" || role === "TASK_CREATOR",
+        update: role === "ADMIN" || role === "TASK_CREATOR" || role === "USER",
         delete: role === "ADMIN",
       },
       users: {
