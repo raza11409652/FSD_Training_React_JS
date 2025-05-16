@@ -18,6 +18,7 @@ const TaskContainer = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [open, setOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const userProfile = useAppSelector((a) => a.auth.user);
 
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -61,6 +62,9 @@ const TaskContainer = () => {
     fetchData(); 
 
   }, [dispatch, selectedProject]);
+  const filteredTasks =  userProfile?.role === 'User' 
+        ? task?.records.filter((task: Task) => task.assignedTo === userProfile?.id) 
+        : task?.records;
   
   const handleDelete = (record: Task) => {
   Modal.confirm({
@@ -209,7 +213,7 @@ const TaskContainer = () => {
       </Title>
       <Table
         columns={columns}
-        dataSource={task?.records || []}
+        dataSource={filteredTasks || []}
         rowKey="id"
         loading={loading}
         scroll={{
