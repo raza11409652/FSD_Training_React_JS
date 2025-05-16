@@ -1,7 +1,6 @@
 import { Button, DatePicker, Form, Input, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { getListOfProjectsApi } from "../../api/project";
-import { getUserRecords } from "../../api/users";
 import { useAppSelector } from "../../slice";
 import usePermission from "../../hooks/usePermission";
 import dayjs from "dayjs";
@@ -12,12 +11,14 @@ interface Props {
   close: () => void;
   onSubmit: (data: TaskBody) => void;
   editingTask: Task | null;
+  users: User[]
 }
 const TaskCreateForm: React.FC<Props> = ({
   open,
   close,
   onSubmit,
-  editingTask
+  editingTask,
+  users
 }) => {
   const { tasks } = usePermission();
   const [form] = Form.useForm();
@@ -35,11 +36,8 @@ const TaskCreateForm: React.FC<Props> = ({
       const fetchData = async () => {
         try {
           setLoading(true);
-           const [users, data] = await Promise.all([
-            getUserRecords(),
-            getListOfProjectsApi(), 
-          ]);
-          setOwners(users.records);
+          const data = await getListOfProjectsApi();
+          setOwners(users);
           setProjects(data.records || []); // Set projects state
 
           // If editing a task, populate the form
@@ -55,8 +53,6 @@ const TaskCreateForm: React.FC<Props> = ({
           } else {
             form.resetFields(); 
           }
-          
-          console.log(form.getFieldsValue(), 'edit')
           setLoading(false); 
         } catch (error) {
           console.error("Failed to fetch projects or users", error);

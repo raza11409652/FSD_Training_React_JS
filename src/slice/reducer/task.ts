@@ -12,11 +12,12 @@ interface Props {
 
 const initialState: Props = { task: undefined, loading: false };
 
-export const getTaskListAction = createAsyncThunk<GetTaskResponse, void>(
+export const getTaskListAction = createAsyncThunk<GetTaskResponse, { projectId?: number }>(
   "getTaskListAction",
-  async (_, { rejectWithValue }) => {
+  async ({ projectId }, { rejectWithValue }) => {
     try {
-      const response = await getListOfTasksApi();
+      //const response = await getListOfTasksApi();
+      const response = await getListOfTasksApi(projectId);
       return response;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (er: any) {

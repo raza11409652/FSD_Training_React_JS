@@ -19,7 +19,7 @@ const TaskContainer = () => {
   const [open, setOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
-  const [selectedProject, setSelectedProject] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
 
   const dispatch = useAppDispatch();
@@ -35,7 +35,8 @@ const TaskContainer = () => {
       }
       setOpen(false);
       setEditingTask(null);
-      dispatch(getTaskListAction());
+      setSelectedProject(null);
+      dispatch(getTaskListAction({}));
     } catch (error) {
       message.error("Failed to save task");
     }
@@ -51,12 +52,7 @@ const TaskContainer = () => {
 
         const projectData = await getListOfProjectsApi();
         setProjects(projectData.records); // Store projects in state
-        if (selectedProject) {
-          //const taskData = await getListOfTasksApi({ projectId: selectedProject });
-          //dispatch(setTaskList(taskData)); // Dispatch filtered tasks
-        } else {
-          dispatch(getTaskListAction()); 
-        }
+        dispatch(getTaskListAction({ projectId: selectedProject ?? undefined }));
       } catch (error) {
         message.error("Failed to fetch data");
       }
@@ -75,13 +71,14 @@ const TaskContainer = () => {
       </div>
     ),
     icon: null,
-    content: record.description,
+    content: record.title,
     okText: 'Delete',
     onOk: async () => {
       try {
         await deleteTaskApi(record.id); 
         message.success("Task deleted successfully");
-        dispatch(getTaskListAction());
+         setSelectedProject(null);
+        dispatch(getTaskListAction({}));
       } catch (error) {
         message.error("Failed to delete task");
       }
@@ -153,7 +150,6 @@ const TaskContainer = () => {
       key: "actions",
       render: (_: any, record: Task) => {
         const canDelete = tasks.delete;
-
           return (
             <>
                 <Button type="link" onClick={() => handleEdit(record)}>
@@ -228,6 +224,7 @@ const TaskContainer = () => {
         }}
         onSubmit={handleCreate}
         editingTask={editingTask}
+        users={users}
       />
     </>
   );
