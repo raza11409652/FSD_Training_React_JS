@@ -46,7 +46,7 @@ const TaskCreateForm: React.FC<Props> = ({
               description: editingTask.description ?? '',
               project: editingTask.project ?? '',
               status: editingTask.status ?? '',
-              assignedTo: editingTask?.assignedTo ,
+              assignedTo: editingTask?.assignedTo ?  editingTask?.assignedTo : undefined ,
               dueDate: editingTask.dueDate ? dayjs(editingTask.dueDate) : null,
             });
           } else {
@@ -118,13 +118,13 @@ const TaskCreateForm: React.FC<Props> = ({
           <Input disabled={isReadOnlyUser} />
         </Form.Item>
         <Form.Item label="Due Date" name="dueDate">
-          <DatePicker disabled={isReadOnlyUser} style={{ width: '100%' }} />
+          <DatePicker disabled={isReadOnlyUser} style={{ width: '100%' }} disabledDate={(current) => current && current.isBefore(dayjs().startOf('day'), 'day')} />
         </Form.Item>
         {editingTask && (
           <Form.Item label="Status" name="status">
             <Select defaultValue={editingTask?.status}>
-              <Select.Option value="in-progress">In Progress</Select.Option>
-              <Select.Option value="completed">Completed</Select.Option>
+              <Select.Option value="IN PROGRESS">In Progress</Select.Option>
+              <Select.Option value="COMPLETED">Completed</Select.Option>
             </Select>
           </Form.Item>
         )}
@@ -158,7 +158,7 @@ const TaskCreateForm: React.FC<Props> = ({
           </Select>
         </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading} disabled={isReadOnlyUser}>
+            <Button type="primary" htmlType="submit" loading={loading} disabled={isReadOnlyUser && !editingTask }>
               {editingTask ? "Update Task" : "Create Task"}
             </Button>
           </Form.Item>
