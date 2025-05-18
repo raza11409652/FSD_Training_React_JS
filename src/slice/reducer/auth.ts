@@ -8,25 +8,28 @@ import {
 import handleAxiosError from "../../utils/axiosError";
 const IS_AUTH = "is-authenticated";
 const PROFILE = "user-profile";
-const SESSION_TOKEN = "user-profile";
+const SESSION_TOKEN = "session-token";
 
 interface Props {
   isAuthenticated: boolean;
   loading: true | false;
-  user?: UserProfile;
+  user?: User;
+  permission?: Permission;
 }
 const initialState: Props = {
   isAuthenticated: getItemFromLocal(IS_AUTH) || false,
   loading: false,
   user: getItemFromLocal(PROFILE) || undefined,
+  // permission: null,
 };
 
 export const authenticateProfileAction = createAsyncThunk<
-  UserProfile | null,
+  GetUserApiResponse | null,
   void
 >("authenticateProfile", async (_, { rejectWithValue }) => {
   try {
     const token = getItemFromLocal(SESSION_TOKEN);
+    // console.log({ token });
     const response = token ? getUserProfile() : null;
     return response;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,13 +60,14 @@ const authSlice = createSlice({
       s.loading = false;
     });
     b.addCase(authenticateProfileAction.fulfilled, (s, { payload }) => {
-      s.isAuthenticated = true;
-      s.loading = false;
       if (payload) {
-        s.user = payload;
+        s.isAuthenticated = true;
+        s.user = payload.user;
+        s.permission = payload.permission;
         setItemInLocal(IS_AUTH, true);
         setItemInLocal(PROFILE, payload);
       }
+      s.loading = false;
     });
   },
 });

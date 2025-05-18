@@ -12,7 +12,7 @@ interface Props {
 
 const initialState: Props = { task: undefined, loading: false };
 
-export const getTaskListAction = createAsyncThunk<GetTaskResponse, { projectId?: number }>(
+export const getTaskListAction = createAsyncThunk<GetTaskResponse, { projectId?: string }>(
   "getTaskListAction",
   async ({ projectId }, { rejectWithValue }) => {
     try {

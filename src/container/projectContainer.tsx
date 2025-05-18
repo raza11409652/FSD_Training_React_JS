@@ -48,7 +48,7 @@ function projectReducer(
 
 const ProjectContainer = () => {
   const { loading, project } = useAppSelector((a) => a.project);
-  const { projects } = usePermission();
+  const permission = usePermission();
   const [projectState, dispatchProjectState] = useReducer(
     projectReducer,
     initialState
@@ -183,14 +183,14 @@ const ProjectContainer = () => {
 
     // dispatchProjectState({ type: "PROJECT_COLUMNS", payload: columns });
     dispatchProjectState({ type: "ROWS_DATA", payload: project?.records });
-  }, [project, projects.delete, projects.update]);
+  }, [project]);
 
   return (
     <>
       <ActionHeader
         title="Projects"
         children={
-          projects.create ? (
+          permission?.projects?.create ? (
             <Button
               icon={<PlusOutlined />}
               variant="filled"
@@ -272,7 +272,7 @@ const ProjectContainer = () => {
             render: (_, record: Project) => {
               return (
                 <>
-                  {projects.update ? (
+                  {permission?.projects.update ? (
                     <Tooltip title="Edit Project">
                       <Button
                         onClick={() => handleUpdate(record)}
@@ -284,7 +284,7 @@ const ProjectContainer = () => {
                       </Button>
                     </Tooltip>
                   ) : null}
-                  {projects.delete ? (
+                  {permission?.projects.delete ? (
                     <Tooltip title={`Delete Project -  ${record.name}`}>
                       <Button
                         style={{ marginLeft: "10px" }}

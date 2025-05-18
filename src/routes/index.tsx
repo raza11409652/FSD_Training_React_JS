@@ -27,7 +27,8 @@ export const AppRoutes = () => {
     dispatch(authenticateProfileAction());
   }, [dispatch]);
 
-  const { users } = usePermission();
+  const permission = usePermission();
+  // const users = permission?.users;
   return (
     <>
       <Suspense fallback={<>Loading....</>}>
@@ -38,7 +39,7 @@ export const AppRoutes = () => {
                 <Route index element={<Navigate to={"/projects"} />} />
                 <Route path="/projects" element={<ProjectContainer />} />
                 <Route path="/tasks" element={<TaskContainer />} />
-                {users.read ? (
+                {permission?.users?.read ? (
                   <Route path="/users" element={<UserContainer />} />
                 ) : null}
               </Route>

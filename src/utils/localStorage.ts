@@ -3,13 +3,17 @@ const isBrowser = () => typeof window !== "undefined";
 
 // Get item from localstorage
 export const getItemFromLocal = (key: string) => {
-  if (isBrowser()) {
-    const item = window.localStorage.getItem(key);
-    if (item) {
-      return JSON.parse(item);
-    } else {
-      return undefined;
+  try {
+    if (isBrowser()) {
+      const item = window.localStorage.getItem(key);
+      if (item) {
+        return JSON.parse(item);
+      } else {
+        return undefined;
+      }
     }
+  } catch {
+    return undefined;
   }
 };
 

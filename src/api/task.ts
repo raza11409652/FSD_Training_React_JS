@@ -1,6 +1,6 @@
 import axiosI from "./axios";
 
-const getListOfTasksApi = async (projectId?: number) => {
+const getListOfTasksApi = async (projectId?: string) => {
     const url = projectId ? `tasks?page=1&size=100&project=${projectId}` : "tasks?page=1&size=100";
     const { data } = await axiosI.get<GetTaskResponse>(url);
     return data;

@@ -8,7 +8,7 @@ import {
 import usePermission from "../hooks/usePermission";
 
 const SideMenu = () => {
-  const { users } = usePermission();
+  const { users } = usePermission() || { users: { read: false } };
   return (
     <div className="app-side-menu">
       <ul>

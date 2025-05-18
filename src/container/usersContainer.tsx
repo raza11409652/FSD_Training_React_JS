@@ -13,7 +13,7 @@ const UserContainer = () => {
   const [openNewUser, setOpenNewUser] = React.useState(false);
 
   const { loading, userResponse, user } = useAppSelector((a) => a.user);
-  const { users } = usePermission();
+  const { users } = usePermission() || { users: null };
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const UserContainer = () => {
       <ActionHeader
         children={
           <>
-            {users.create ? (
+            {users?.create ? (
               <Button
                 onClick={() => setOpenNewUser(true)}
                 icon={<PlusOutlined />}

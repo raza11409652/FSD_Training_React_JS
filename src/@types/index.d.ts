@@ -11,16 +11,47 @@ interface Project {
   createdAt: string;
   updatedAt: string;
 }
-interface UserProfile {
-  id: number;
-  name: string;
-  profileImage: string;
-  role: string;
-  email: string;
-  createdAt: string;
-  updatedAt: string;
+interface GetUserApiResponse {
+  user: User;
+  permission: Permission;
+}
+interface Permission {
+  projects: Projects;
+  tasks: Tasks;
+  users: Users;
 }
 
+interface Projects {
+  read: boolean;
+  create: boolean;
+  update: boolean;
+  delete: boolean;
+}
+
+interface Tasks {
+  read: boolean;
+  create: boolean;
+  update: boolean;
+  delete: boolean;
+}
+
+interface Users {
+  read: boolean;
+  create: boolean;
+  update: boolean;
+  delete: boolean;
+}
+
+// interface UserProfile {
+//   id: number;
+//   name: string;
+//   profileImage: string;
+//   role: string;
+//   email: string;
+//   createdAt: string;
+//   updatedAt: string;
+// }
+type TaskStatus = "CREATED" | "IN PROGRESS" | "ON HOLD" | "COMPLETED";
 interface ProjectBody {
   name: string;
   description: string;
@@ -30,24 +61,25 @@ interface UpdatePayload {
   id: number | string;
   body: ProjectBody;
 }
-interface GetTaskResponse{
+interface GetTaskResponse {
   totalCount: number;
   records: Task[];
   totalPages: number;
   currentPage: number;
 }
-interface Task{
+interface Task {
   id: number;
   title: string;
   description: string;
   dueDate?: string;
-  status: string;
+  status: TaskStatus;
   assignedTo?: number;
-  project: number
+  projectId: number;
   createdAt: string;
   updatedAt: string;
   createdBy: string;
-  project?: number
+  project?: Project;
+  user?: User;
 }
 interface TaskBody {
   title: string;
@@ -55,8 +87,7 @@ interface TaskBody {
   dueDate?: string;
   status: string;
   assignedTo?: number;
-  project: number
-
+  project: number;
 }
 interface UserApiResponse {
   totalCount: number;
