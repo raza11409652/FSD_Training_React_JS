@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../slice";
 // import usePermission from "../../hooks/usePermission";
 import dayjs from "dayjs";
+import usePermission from "../../hooks/usePermission";
 
 interface Props {
   open: true | false;
@@ -25,8 +26,12 @@ const TaskCreateForm: React.FC<Props> = ({
   // const [owners, setOwners] = useState<any[]>([]);
   const userProfile = useAppSelector((a) => a.auth.user);
 
-  const isReadOnlyUser = userProfile?.role === "USER";
+  // const isReadOnlyUser = userProfile?.role === "USER";
+  const { tasks } = usePermission() || {
+    tasks: { update: false, create: false },
+  };
 
+  const isReadOnlyUser = tasks.update && userProfile?.role === "USER";
   useEffect(() => {
     if (open) {
       const fetchData = async () => {
